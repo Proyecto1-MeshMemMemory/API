@@ -10,9 +10,6 @@
 LocalMemoryManager::LocalMemoryManager() {
 }
 
-LocalMemoryManager::LocalMemoryManager(const LocalMemoryManager& orig) {
-}
-
 LocalMemoryManager::~LocalMemoryManager() {
 }
 
