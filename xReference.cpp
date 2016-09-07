@@ -7,6 +7,9 @@
 
 #include "xReference.h"
 
+template <typename T>
+
+
 xReference::xReference() {
 }
 
