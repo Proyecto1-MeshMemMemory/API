@@ -8,8 +8,27 @@
 #include "LocalMemoryManager.h"
 
 LocalMemoryManager::LocalMemoryManager() {
+
 }
 
 LocalMemoryManager::~LocalMemoryManager() {
 }
+/*
+xReference* LocalMemoryManager::xMalloc(int pSize, int pType) {
 
+}
+
+xReference* LocalMemoryManager::xMalloc(int pSize, int pType, void* pValue) {
+    
+    free(pValue);
+}
+
+void LocalMemoryManager::xAssing(xReference* pRefe, void* pValue) {
+
+}
+
+void LocalMemoryManager::xFree(xReference* pRefe) {
+
+}
+
+*/

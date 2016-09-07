@@ -16,10 +16,10 @@ class LocalMemoryManager : public Constantes{
 public:
     LocalMemoryManager();
     virtual ~LocalMemoryManager();
-    xReference* xMalloc(int pSize, int pType);
-    xReference* xMalloc(int pSize, int pType, void* pValue);
-    void xAssing(xReference* pRefe, void* pValue);
-    void xFree(xReference* pRefe);
+    //xReference* xMalloc(int pSize, int pType);
+    //xReference* xMalloc(int pSize, int pType, void* pValue);
+    //void xAssing(xReference* pRefe, void* pValue);
+    //void xFree(xReference* pRefe);
 private:
     cliente * _cliente;
     

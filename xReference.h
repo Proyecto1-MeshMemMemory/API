@@ -8,19 +8,18 @@
 #ifndef XREFERENCE_H
 #define	XREFERENCE_H
 
-template <typename jojo>
+template <typename dp>
 class xReference {
 public:
     xReference();
-    xReference(const xReference& orig);
     virtual ~xReference();
-    xReference operator==();
+    //xReference operator==();
     
 private:
     int ID;
     int size;
     char* type;
-    jojo *m_ptData;
+    dp * m_ptData;
 };
 
 #endif	/* XREFERENCE_H */

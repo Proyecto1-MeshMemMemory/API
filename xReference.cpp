@@ -7,15 +7,10 @@
 
 #include "xReference.h"
 
-template <typename T>
-
-
-xReference::xReference() {
+template <typename dp> xReference<dp>::xReference() {
 }
 
-xReference::xReference(const xReference& orig) {
-}
 
-xReference::~xReference() {
+template <typename dp> xReference<dp>::~xReference() {
 }
 
