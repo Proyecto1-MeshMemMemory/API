@@ -7,13 +7,22 @@
 
 #ifndef LOCALMEMORYMANAGER_H
 #define	LOCALMEMORYMANAGER_H
+#include "cliente.h"
+#include "xReference.h"
+#include "Constantes.h"
 
-class LocalMemoryManager {
+
+class LocalMemoryManager : public Constantes{
 public:
     LocalMemoryManager();
-    LocalMemoryManager(const LocalMemoryManager& orig);
     virtual ~LocalMemoryManager();
+    xReference* xMalloc(int pSize, int pType);
+    xReference* xMalloc(int pSize, int pType, void* pValue);
+    void xAssing(xReference* pRefe, void* pValue);
+    void xFree(xReference* pRefe);
 private:
+    cliente * _cliente;
+    
 
 };
 
