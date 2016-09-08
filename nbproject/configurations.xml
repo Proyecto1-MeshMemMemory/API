@@ -5,6 +5,7 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>Constantes.h</itemPath>
+      <itemPath>JsonCreator.h</itemPath>
       <itemPath>LocalMemoryManager.h</itemPath>
       <itemPath>cliente.h</itemPath>
       <itemPath>xReference.h</itemPath>
@@ -17,6 +18,7 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>Constantes.cpp</itemPath>
+      <itemPath>JsonCreator.cpp</itemPath>
       <itemPath>LocalMemoryManager.cpp</itemPath>
       <itemPath>cliente.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
@@ -51,6 +53,10 @@
       <item path="Constantes.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Constantes.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="JsonCreator.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="JsonCreator.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="LocalMemoryManager.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -90,6 +96,10 @@
       <item path="Constantes.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Constantes.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="JsonCreator.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="JsonCreator.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="LocalMemoryManager.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -36,6 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/Constantes.o \
+	${OBJECTDIR}/JsonCreator.o \
 	${OBJECTDIR}/LocalMemoryManager.o \
 	${OBJECTDIR}/cliente.o \
 	${OBJECTDIR}/main.o \
@@ -70,6 +71,11 @@ ${OBJECTDIR}/Constantes.o: Constantes.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Constantes.o Constantes.cpp
+
+${OBJECTDIR}/JsonCreator.o: JsonCreator.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/JsonCreator.o JsonCreator.cpp
 
 ${OBJECTDIR}/LocalMemoryManager.o: LocalMemoryManager.cpp 
 	${MKDIR} -p ${OBJECTDIR}
