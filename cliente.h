@@ -27,9 +27,10 @@ public:
     virtual ~cliente();
     void* sendMessageToServer(string pMessage, int pLenght );
     void* sendMessageToServer(string pMessage);
+    void * connectToServer();
 private:
     int _port;
-    char* _ip;
+    char* _ip, _token;
     int _sockfd,_n;
     struct sockaddr_in _serv_addr;
     struct hostent * _server;
