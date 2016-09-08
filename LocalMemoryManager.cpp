@@ -129,7 +129,7 @@ void LocalMemoryManager::xAssing(void* pRefe, void* pValue, int pType) {
         temp= _JsonMessageCreator->createMessage(OPERATION_WR, _Token, pValue,
             0,1);
     }
-    temp=_cliente->sendMessageToServer(temp);
+    temp=(char*)_cliente->sendMessageToServer(temp);
     std::cout<<temp<<std::endl;
 }
 
@@ -149,6 +149,6 @@ void LocalMemoryManager::xFree(void* pRefe, int pType) {
         xReference<double>* xRefePtr= (xReference<double>*)pRefe;
         temp= _JsonMessageCreator->createMessage(OPERATION_DL, _Token, NULL, 0,1);
     }
-    temp=_cliente->sendMessageToServer(temp);
+    temp=(char*)_cliente->sendMessageToServer(temp);
     std::cout<<temp<<std::endl;
 }
