@@ -30,7 +30,29 @@ public:
     static const int SEIS=6;
     static const int SIETE=7;
     static const int DIEZ=10;
+    
+    /*constantes de uso dentro de las clases*/
+    
     static const int BUFFER_SIZE=10;
+    static const int TOKE_SIZE=128;
+    /*write memory*/
+    static const int OPERATION_WR=0;
+    /*read memory*/
+    static const int OPERATION_RD=1;
+    /*delete memory*/
+    static const int OPERATION_DL=2;
+    /*allocate memory*/
+    static const int OPERATION_AL=3;
+    /*increment reference counter*/
+    static const int OPERATION_IR=4;
+    /*decrement reference counter*/
+    static const int OPERATION_DR=5;
+    static const char* REQUEST_NEW_TOKEN;
+    static const char* OPERATION;
+    static const char* TOKEN;
+    static const char* ID;
+    static const char* MESSAGE;
+    static const char* CHECK;
     
     /*Errores por parte del cliente que se usara*/
     
