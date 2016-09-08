@@ -25,6 +25,7 @@ class cliente :public Constantes{
 public:
     cliente(int pPort, char* pIP);
     virtual ~cliente();
+    void * connectToServer();
     void* sendMessageToServer(string pMessage, int pLenght );
     void* sendMessageToServer(string pMessage);
 private:
@@ -33,7 +34,6 @@ private:
     int _sockfd,_n;
     struct sockaddr_in _serv_addr;
     struct hostent * _server;
-    void * connectToServer(int port, const char* ip);
     void error(const char* msg);
 
 };

@@ -8,14 +8,16 @@
 #ifndef XREFERENCE_H
 #define	XREFERENCE_H
 
+template <class T>
 class xReference {
 public:
     xReference();
-    xReference(const xReference& orig);
     virtual ~xReference();
 private:
-    
-
+    int ID;
+    int size;
+    char* type;
+    T * m_ptData;
 };
 
 #endif	/* XREFERENCE_H */

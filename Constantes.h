@@ -13,7 +13,6 @@
 
 class Constantes {
 public:
-    /*tipado de datos con los cuales se trabajara*/
     static const int CHAR=1;
     static const int INT=2;
     static const int FLOAT=3;
@@ -30,16 +29,29 @@ public:
     static const int SEIS=6;
     static const int SIETE=7;
     static const int DIEZ=10;
+    
+    /*constantes de uso dentro de las clases*/
+    
     static const int BUFFER_SIZE=10;
-    
-    /*Errores por parte del cliente que se usara*/
-    
-    static const char* ERROR1;
-    static const char* ERROR2;
-    static const char* ERROR3;
-    static const char* ERROR4;
-    static const char* ERROR5;
-    static const char* ERROR6;
+    static const int TOKE_SIZE=128;
+    /*write memory*/
+    static const int OPERATION_WR=0;
+    /*read memory*/
+    static const int OPERATION_RD=1;
+    /*delete memory*/
+    static const int OPERATION_DL=2;
+    /*allocate memory*/
+    static const int OPERATION_AL=3;
+    /*increment reference counter*/
+    static const int OPERATION_IR=4;
+    /*decrement reference counter*/
+    static const int OPERATION_DR=5;
+    static const char* REQUEST_NEW_TOKEN;
+    static const char* OPERATION;
+    static const char* TOKEN;
+    static const char* ID;
+    static const char* MESSAGE;
+    static const char* CHECK;
     
     void sleep_(double pSeconds){
         std::chrono::time_point<std::chrono::system_clock> start, end;
