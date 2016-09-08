@@ -53,6 +53,15 @@ public:
     static const char* MESSAGE;
     static const char* CHECK;
     
+    /*Errores por parte del cliente que se usara*/
+    
+    static const char* ERROR1;
+    static const char* ERROR2;
+    static const char* ERROR3;
+    static const char* ERROR4;
+    static const char* ERROR5;
+    static const char* ERROR6;
+    
     void sleep_(double pSeconds){
         std::chrono::time_point<std::chrono::system_clock> start, end;
         start = std::chrono::system_clock::now();
