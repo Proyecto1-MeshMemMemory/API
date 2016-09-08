@@ -7,10 +7,13 @@
 
 #include "xReference.h"
 
-template <typename dp> xReference<dp>::xReference() {
+template<class dp>
+xReference<dp>::xReference() {
+
 }
 
+template<class dp>
+xReference<dp>::~xReference() {
 
-template <typename dp> xReference<dp>::~xReference() {
 }
 
