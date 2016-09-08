@@ -7,14 +7,13 @@
 
 #ifndef XREFERENCE_H
 #define	XREFERENCE_H
+#include <string>
 
-template <typename dp>
+template <class dp>
 class xReference {
 public:
     xReference();
     virtual ~xReference();
-    //xReference operator==();
-    
 private:
     int ID;
     int size;
