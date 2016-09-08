@@ -8,19 +8,54 @@
 #ifndef XREFERENCE_H
 #define	XREFERENCE_H
 
-template <typename jojo>
+#include <string>
+#include <iostream>
+#include <sstream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <cstdlib>
+
+template <class T> 
+
 class xReference {
 public:
-    xReference();
-    xReference(const xReference& orig);
+    xReference(int pID, int pSize, int pType);
     virtual ~xReference();
-    xReference operator==();
+    int getType();
+    int getCount();
+    void setType(int pType);
+    friend bool operator==(const xReference<T>& obj, const xReference<T>& obj2){
+        bool rVal = false;      
+        if (obj._type==obj2._type){
+            rVal = true;
+        }     
+        return rVal;
+    };
+    
+    friend bool operator!=(const xReference<T>& obj, const xReference<T>& obj2){
+        bool rVal = false;      
+        if (obj._type!=obj2._type){
+            rVal = true;
+        }     
+        return rVal;     
+    };
+    
+    xReference& operator=(const xReference<T>& obj){
+        obj._count++;
+        printf("Tome mil :3:\n");
+        //return 0;
+    }
+    
+    friend void operator*(const xReference<T>& obj){
+        printf("Tome dos mil :3\n");
+    }
     
 private:
-    int ID;
-    int size;
-    char* type;
-    jojo *m_ptData;
+    int _ID;
+    int _size;
+    int _type;
+    int _count;
 };
 
 #endif	/* XREFERENCE_H */
