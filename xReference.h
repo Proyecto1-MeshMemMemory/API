@@ -17,37 +17,74 @@
 #include "Constantes.h"
 #include "LocalMemoryManager.h"
 
+/**
+ * clase que hace los xReference.
+ */
 template <class T> 
 class xReference : public Constantes{
     friend class LocalMemoryManager;
-protected:
+private:
     int _ID;
     int _size;
     int _type;
     int _count;
     LocalMemoryManager* _pointerToLocalManager;
-public:
+    /**
+     * constructor que se usa nada mas sobre el Manager locar ya que es privado.
+     * @param pID recibe el id del objetp, el tipado y el this del manager.
+     * @param pSize
+     * @param pType
+     * @param pLocalManager
+     */
     xReference(int pID, int pSize, int pType, LocalMemoryManager* pLocalManager){
         _ID=pID;
         _size=pSize;
         _type=pType;
         _pointerToLocalManager=pLocalManager;
     };
+public:
     virtual ~xReference(){
         
     };
+    
+    /**
+     * metodo para obetener el tipo del xReference.
+     * @return entero del tipado
+     */
     int getType(){
         return _type;
     };
+    
+    /**
+     * retorna la cantidad de apuntadores que tiene el objeto.
+     * @return entero de la cantidad de conteos.
+     */
     int getCount(){
         return _count;
     };
+    
+    /**
+     * retorna el id del objeto 
+     * @return entero del id del objeto.
+     */
     int getID(){
         return _ID;
     };
+    
+    /**
+     * obtiene el tamaño del objeto guardado en el Manager.
+     * @return entero del tamaño.
+     */
     int getSize(){
         return _size;
     };
+    
+    /**
+     * sobrecarga del operador '==', este operador lo vamos a usar para 
+     * comparar un objeto xReference y otro.
+     * @param obj recibe un otro xReference para comparar.
+     * @return return booleano de si la verificacion.
+     */
     friend bool operator==(const xReference<T>& obj, const xReference<T>& obj2){
         bool rVal = false;      
         if (obj._ID==obj2._ID && obj._type==obj2._type){
@@ -56,6 +93,12 @@ public:
         return rVal;
     };
     
+    /**
+     * sobrecarga del operador '!=', este operador lo vamos a usar para 
+     * comparar un objeto xReference y otro.
+     * @param obj recibe un otro xReference para comparar.
+     * @return return booleano de si la verificacion.
+     */
     friend bool operator!=(const xReference<T>& obj, const xReference<T>& obj2){
         bool rVal = false;      
         if (obj._ID!=obj2._ID && obj._type!=obj2._type){
@@ -64,17 +107,35 @@ public:
         return rVal;     
     };
     
+    /**
+     * operador de igualdad, este verifica que sean diferentes y los datos
+     * internos del objeto 1 se hacen iguales a los del objeto 2.
+     * @param obj
+     * @return 
+     */
     xReference& operator=(const xReference<T>& obj){   
         if(this != &obj){
             printf("Tome mil :3:\n");
             this->_pointerToLocalManager->changeReferenceCounter(this->_ID,OPERATION_DR);
             this->_pointerToLocalManager->changeReferenceCounter(obj._ID,OPERATION_IR);
             this->_ID=obj._ID;
+            this->_type=obj._type;
+            this->_size=obj._size;
+            this->_count=obj._count;
         }
     }
-    xReference<T>& operator*(){
-        this->_pointerToLocalManager->getDataFromReference(_ID, OPERATION_RD);
+    
+    /**
+     * metodo para realizarle una desreferencia del objeto y pedirselo al Local
+     * Manager y este al Manager.
+     * @return retorna el objeto del Manager y lo guarda en memoria para su
+     * previo uso.
+     */
+    void* operator*(){
+        void * temp= this->_pointerToLocalManager->getDataFromReference(_ID,
+                OPERATION_RD);
         printf("Tome dos mil :3\n");
+        return temp;
     };
     
 };

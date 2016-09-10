@@ -8,19 +8,37 @@
 #include "LocalMemoryManager.h"
 #include "xReference.h"
 
+/**
+ * constructor de la clase
+ */
 LocalMemoryManager::LocalMemoryManager() {
     _Token=NULL;
 }
 
+/**
+ * destructor
+ */
 LocalMemoryManager::~LocalMemoryManager() {
 }
 
+/**
+ * metodo para inicializar la conexion contra el manager remoto, recibe un 
+ * puerto y un ip.
+ * @param pPort recibe un entero que es el puerto
+ * @param pIp recibe un char* que es el ip.
+ * @return retorna elresultado del mensaje recibido y por dehajo establece el 
+ * token recibido.
+ */
 char* LocalMemoryManager::initialize(int pPort, char* pIp) {
     _cliente= new cliente(pPort, pIp);
     _Token=(char*)_cliente->connectToServer();
     _JsonMessageCreator= new JsonCreator();
 }
 
+/**
+ * metodo para pedir un nuevo toke.
+ * @return retorna el mensaje recibido por el Manager.
+ */
 char* LocalMemoryManager::requestNewToken() {
     std::string temp=(char*)_cliente->sendMessageToServer(REQUEST_NEW_TOKEN);
     rapidjson::Document JsonDocument;
@@ -34,6 +52,14 @@ char* LocalMemoryManager::requestNewToken() {
     return _Token;
 }
 
+/**
+ * metodo para pedirle memoria al Manager, recibe la cantidad de espacio que se 
+ * quiere pedir y el typo del dato que estan creando.
+ * @param pSize entero del tamaño del espacio que van a pedir.
+ * @param pType entero del tipo de dato que van a pedir.
+ * @return retorna un puntero xReference en forma de void * ya que no existe un 
+ * solo tipo que se puede retornar al ser un template el xReference.
+ */
 void* LocalMemoryManager::xMalloc(int pSize, int pType) {
     std::string temp= _JsonMessageCreator->createMessage(OPERATION_AL,_Token,
             NULL,pSize,-UNO);
@@ -81,6 +107,16 @@ void* LocalMemoryManager::xMalloc(int pSize, int pType) {
     }
 }
 
+/**
+ * metodo para pedirle memoria al Manager, recibe la cantidad de espacio que se 
+ * quiere pedir, el typo del dato que estan creando y el dato que de una vez 
+ * vamos a guardar en ese espacio de memoria.
+ * @param pSize entero del tamaño del espacio que van a pedir.
+ * @param pType entero del tipo de dato que van a pedir.
+ * @param pValue es dato que vamos a guardar en el espacio de memoria.
+ * @return retorna un puntero xReference en forma de void * ya que no existe un 
+ * solo tipo que se puede retornar al ser un template el xReference.
+ */
 void* LocalMemoryManager::xMalloc(int pSize, int pType, void* pValue) {
     std::string temp= _JsonMessageCreator->createMessage(OPERATION_WR,_Token,
             pValue,pSize,-UNO);
@@ -132,6 +168,15 @@ void* LocalMemoryManager::xMalloc(int pSize, int pType, void* pValue) {
     return NULL;
 }
 
+/**
+ * metodo para asignar un cierto dato a una posicion de memoria dentro del 
+ * manager y una vez terminado libera el dato que el pasamos, recibe un 
+ * xReference, el valor que queremos y el tipado del xReference.
+ * @param pRefe dato tipo xReference<T>* es la referencia donde vamos a 
+ * guardarla.
+ * @param pValue dato tipo void*, es el dato queremos enviar.
+ * @param pType dato entero, es la constante del tipado que vamos a usar.
+ */
 void LocalMemoryManager::xAssing(void* pRefe, void* pValue, int pType) {
     std::string temp;
     //a la espera de ser terminado
@@ -156,6 +201,11 @@ void LocalMemoryManager::xAssing(void* pRefe, void* pValue, int pType) {
     std::cout<<temp<<std::endl;
 }
 
+/**
+ * metodo para liberar memoria, recibe un xReference y su tipado, 
+ * @param pRefe puntero del xReference que queremos liberar.
+ * @param pType entero del tipado del dato.
+ */
 void LocalMemoryManager::xFree(void* pRefe, int pType) {
     std::string temp;
     //a la espera de ser terminado
@@ -180,6 +230,14 @@ void LocalMemoryManager::xFree(void* pRefe, int pType) {
     std::cout<<temp<<std::endl;
 }
 
+/**
+ * metodo para cambiar la cantidad de referencias de un xReference en el 
+ * Manager, recibe un entero del id y un entero de la operacion que vamos a
+ * realizar, ya sea aumentar o disminuir conteo de referencias.
+ * @param pID entero del id del xReference.
+ * @param pOp entero de la operacion que vamos a realizar.
+ * @return retorna el mensaje que nos devolvio el Manager.
+ */
 void* LocalMemoryManager::changeReferenceCounter(int pID, int pOp) {
     string temp=_JsonMessageCreator->createMessage(pOp, _Token, NULL, 
             CERO, pID);
@@ -197,6 +255,14 @@ void* LocalMemoryManager::changeReferenceCounter(int pID, int pOp) {
     }
 }
 
+/**
+ * metodo para realizar la desreferencia de un xReference, con lo cual se nos
+ * devolvera el dato al que apunta ese xReference. Recibe el id del objeto y 
+ * el tamaño que esta pidiendo.
+ * @param pID entero que es el id del objeto que queremos.
+ * @param pSize entero del tamaño del objeto que estamos pidiendo.
+ * @return retorna el dato almacenado ahora en un puntero void*s
+ */
 void* LocalMemoryManager::getDataFromReference(int pID, int pSize) {
     string temp=_JsonMessageCreator->createMessage(OPERATION_RD, _Token, NULL,
             pSize, pID);
@@ -213,5 +279,8 @@ void* LocalMemoryManager::getDataFromReference(int pID, int pSize) {
         return NULL;
     }
     tempValue= tempJsonRecived[MESSAGE];
-    return (void*)tempValue.GetString();
+    void * tempToReturn= malloc(pSize);
+    string tempDataFromJson= tempValue.GetString();
+    memcpy(tempToReturn, tempDataFromJson.c_str(), pSize);
+    return tempToReturn;
 }

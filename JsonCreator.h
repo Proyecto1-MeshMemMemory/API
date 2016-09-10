@@ -11,6 +11,9 @@
 #include "rapidjson/prettywriter.h"
 #include "Constantes.h"
 
+/**
+ * metodo para hacer Jsons segun los parametro que se le proporcionen.
+ */
 using namespace std;
 class JsonCreator : public Constantes{
 public:

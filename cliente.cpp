@@ -7,15 +7,28 @@
 
 #include "cliente.h"
 
+/**
+ * constructor, recibe el puerto y el ip a donde nos vamos a conectar.
+ * @param pPort dato tipo entero, es el puerto.
+ * @param pIP dato tipo char*, es el ip.
+ */
 cliente::cliente(int pPort, char* pIP) {
     _ip=pIP;
     _port=pPort;
 }
 
+/**
+ * destructor
+ */
 cliente::~cliente() {
     
 }
 
+/**
+ * metodo para conectar el servidor y este nos retornara el Token contra el que
+ * cual hacemos las comunicaciones.
+ * @return retorna el token en forma de char*.
+ */
 void* cliente::connectToServer() {
     _sockfd= socket(AF_INET, SOCK_STREAM, CERO);
     if (_sockfd < CERO) 
@@ -42,6 +55,12 @@ void* cliente::connectToServer() {
     return askForToken;
 }
 
+/**
+ * metodo para enviar un mensaje al server con un tamaño definido.
+ * @param pMessage recibe un string del mensaje en formato Json.
+ * @param pLenght recibe un entero del largo de string Json que le enviamos.
+ * @return retorna el resultado del envio del mensaje.
+ */
 void* cliente::sendMessageToServer(string pMessage, int pLenght) {
     void* bufferedReader=malloc(BUFFER_SIZE);
     char datoToServer[pLenght+UNO];
@@ -57,6 +76,11 @@ void* cliente::sendMessageToServer(string pMessage, int pLenght) {
     return bufferedReader;
 }
 
+/**
+ * metodo para enviar un mensaje al server sin un tamaño definido.
+ * @param pMessage recibe un string del mensaje en formato Json.
+ * @return retorna el resultado del envio del mensaje.
+ */
 void* cliente::sendMessageToServer(string pMessage) {
     void* bufferedReader=malloc(BUFFER_SIZE);
     char datoToServer[pMessage.length()+UNO];
@@ -72,6 +96,10 @@ void* cliente::sendMessageToServer(string pMessage) {
     return bufferedReader;
 }
 
+/**
+ * metodo debug para saber cuando se presente un error.
+ * @param msg recibe el char* del mensaje que fue atrapado.
+ */
 void cliente::error(const char* msg) {
     perror(msg);
     exit(UNO);

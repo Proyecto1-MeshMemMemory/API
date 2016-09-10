@@ -45,7 +45,9 @@ int main(int argc, char** argv) {
      * */
     
     LocalMemoryManager * nuevo = new LocalMemoryManager();
-    
+    nuevo->initialize(5001,"127.0.0.1\0");
+    nuevo->requestNewToken();
+    while(true);
     return 0;
 }
 

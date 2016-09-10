@@ -7,12 +7,27 @@
 
 #include "JsonCreator.h"
 
+/**
+ * constructor de la clase.
+ */
 JsonCreator::JsonCreator() {
 }
 
+/**
+ * destructo de la clase
+ */
 JsonCreator::~JsonCreator() {
 }
 
+/**
+ * metodo para crear el mensaje segun los parametros que se pasen.
+ * @param pOperation entero de la operacion que queremos realizar.
+ * @param pToken char* del token que estamos usando.
+ * @param pMessage void* del mensaje que queremos envar a guardar.
+ * @param pLenght entero del largo del mensaje que vamos a enviar-
+ * @param pId entero del id del vamos a extrañr el daor
+ * @return returna el mensaje ya creado.
+ */
 string JsonCreator::createMessage(int pOperation, string pToken, void* pMessage,
         int pLenght,  int pId) {
     rapidjson::StringBuffer JsonToWrite;

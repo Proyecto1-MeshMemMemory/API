@@ -12,6 +12,9 @@
 #include "JsonCreator.h"
 #include <new>
 
+/**
+ * clase para crear el singleton que va a manejar a nivel local los datos.
+ */
 class LocalMemoryManager : public Constantes{
 public:
     LocalMemoryManager();
