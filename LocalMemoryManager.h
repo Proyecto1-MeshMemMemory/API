@@ -8,8 +8,6 @@
 #ifndef LOCALMEMORYMANAGER_H
 #define	LOCALMEMORYMANAGER_H
 #include "cliente.h"
-#include "xReference.h"
-#include "xReference.cpp"
 #include "Constantes.h"
 #include "JsonCreator.h"
 #include <new>
@@ -24,6 +22,8 @@ public:
     void* xMalloc(int pSize, int pType, void* pValue);
     void xAssing(void* pRefe, void* pValue, int pType);
     void xFree(void* pRefe, int pType);
+    void* changeReferenceCounter(int pID, int pOp);
+    void* getDataFromReference(int pID, int pSize);
 private:
     cliente * _cliente;
     JsonCreator* _JsonMessageCreator;
