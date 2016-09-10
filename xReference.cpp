@@ -6,15 +6,3 @@
  */
 
 #include "xReference.h"
-
-
-template<class T>
-xReference<T>::xReference() {
-
-}
-
-template<class T>
-xReference<T>::~xReference() {
-
-}
-
