@@ -17,7 +17,7 @@ public:
     static const int INT=2;
     static const int FLOAT=3;
     static const int DOUBLE=4;
-    
+    static const int LONG=5;
     /*numeros de multiproposito*/
     
     static const int CERO=0;
