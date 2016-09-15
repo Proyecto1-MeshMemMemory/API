@@ -23,25 +23,6 @@
 template <class T> 
 class xReference : public Constantes{
     friend class LocalMemoryManager;
-private:
-    int _ID;
-    int _size;
-    int _type;
-    int _count;
-    LocalMemoryManager* _pointerToLocalManager;
-    /**
-     * constructor que se usa nada mas sobre el Manager locar ya que es privado.
-     * @param pID recibe el id del objetp, el tipado y el this del manager.
-     * @param pSize
-     * @param pType
-     * @param pLocalManager
-     */
-    xReference(int pID, int pSize, int pType, LocalMemoryManager* pLocalManager){
-        _ID=pID;
-        _size=pSize;
-        _type=pType;
-        _pointerToLocalManager=pLocalManager;
-    };
 public:
     virtual ~xReference(){
         
@@ -138,6 +119,25 @@ public:
         return temp;
     };
     
+private:
+    int _ID;
+    int _size;
+    int _type;
+    int _count;
+    LocalMemoryManager* _pointerToLocalManager;
+    /**
+     * constructor que se usa nada mas sobre el Manager locar ya que es privado.
+     * @param pID recibe el id del objetp, el tipado y el this del manager.
+     * @param pSize
+     * @param pType
+     * @param pLocalManager
+     */
+    xReference(int pID, int pSize, int pType, LocalMemoryManager* pLocalManager){
+        _ID=pID;
+        _size=pSize;
+        _type=pType;
+        _pointerToLocalManager=pLocalManager;
+    };
 };
 
 
