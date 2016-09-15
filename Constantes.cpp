@@ -19,3 +19,4 @@ const char* Constantes::ID="id";
 const char* Constantes::OPERATION="operation";
 const char* Constantes::MESSAGE="message";
 const char* Constantes::TOKEN="token";
+const char* Constantes::SIZE="size";
