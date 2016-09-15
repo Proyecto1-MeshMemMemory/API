@@ -31,8 +31,18 @@ LocalMemoryManager::~LocalMemoryManager() {
  */
 char* LocalMemoryManager::initialize(int pPort, char* pIp) {
     _cliente= new cliente(pPort, pIp);
-    _Token=(char*)_cliente->connectToServer();
+    string temp=(char*)_cliente->connectToServer();
+    cout<<temp<<endl;
     _JsonMessageCreator= new JsonCreator();
+    //extraemos el Token que viene dentro del Json.
+    rapidjson::Document JsonTkoneTemp;
+    JsonTkoneTemp.Parse(temp.c_str());
+    if(!JsonTkoneTemp.IsObject()){
+        cout<<"Error: Json corrupto"<<endl;
+        return NULL;
+    }
+    rapidjson::Value& TokenInJson=JsonTkoneTemp[TOKEN];
+    _Token=(char*)TokenInJson.GetString();
 }
 
 /**
@@ -53,6 +63,25 @@ char* LocalMemoryManager::requestNewToken() {
 }
 
 /**
+ * metodo para obtener el tamaño del tipado del dato segun el 
+ * dato que se escogio que sera el xReference.
+ * @param pType se ingresa la constante del tipado que tenemos.
+ * @return retorna el peso del tipado real en c++.
+ */
+int LocalMemoryManager::getSizeOfType(int pType) {
+    if(pType==CHAR)
+        return sizeof(char);
+    else if(pType==INT)
+        return sizeof(int);
+    else if(pType==FLOAT)
+        return sizeof(float);
+    else if(pType==DOUBLE)
+        return sizeof(double);
+    else if(pType==LONG)
+        return sizeof(long);
+}
+
+/**
  * metodo para pedirle memoria al Manager, recibe la cantidad de espacio que se 
  * quiere pedir y el typo del dato que estan creando.
  * @param pSize entero del tamaño del espacio que van a pedir.
@@ -62,48 +91,56 @@ char* LocalMemoryManager::requestNewToken() {
  */
 void* LocalMemoryManager::xMalloc(int pSize, int pType) {
     std::string temp= _JsonMessageCreator->createMessage(OPERATION_AL,_Token,
-            NULL,pSize,-UNO);
+            NULL,pSize*getSizeOfType(pType),-UNO);
     std::string tempFromServer=(char*)_cliente->sendMessageToServer(temp);
     rapidjson::Document JsonDocument;
     JsonDocument.Parse(tempFromServer.c_str());
-    if(JsonDocument.IsObject()){
-        rapidjson::Value & respondCheck= JsonDocument[CHECK];
-        if(respondCheck.GetInt()==UNO){
-            std::cout<<"error de alojamiento de espacio"<<std::endl;
-            return NULL;
-        }
-        rapidjson::Value & respondId= JsonDocument[ID];
-        int tempId= respondId.GetInt();
-        /*-----creacion del puntero del xReference-----*/
-        if(pType==CHAR){
-            void* ptrVoidRefe=malloc(sizeof(xReference<char>));
-            //se usa 'placemente new' para usar constructor del puntero 
-            //y asignarlos en un espacio especifico
-            xReference<char>* tempRefe= new (ptrVoidRefe)xReference<char>(
-                tempId, pSize,CHAR, this);
-            //se retorna el puntero como un void* asi como se hace con un malloc
-            return (void*)tempRefe;
-        }else if(pType==INT){
-            void* ptrVoidRefe=malloc(sizeof(xReference<int>));
-            xReference<int>* tempRefe= new (ptrVoidRefe) xReference<int>(
-                tempId, pSize,INT, this);
-            return (void*)tempRefe;
-        }else if(pType==FLOAT){
-            void* ptrVoidRefe=malloc(sizeof(xReference<float>));
-            xReference<float>* tempRefe= new (ptrVoidRefe) xReference<float>(
-                tempId, pSize,FLOAT, this);
-            return (void*)tempRefe;
-        }else if(pType==DOUBLE){
-            void* ptrVoidRefe=malloc(sizeof(xReference<double>));
-            xReference<double>* tempRefe= new (ptrVoidRefe) xReference<double>(
-                tempId, pSize,DOUBLE, this);
-            return (void*)tempRefe;
-        }else if(pType==LONG){
-            void* ptrVoidRefe=malloc(sizeof(xReference<long>));
-            xReference<long>* tempRefe= new (ptrVoidRefe) xReference<long>(
-                tempId, pSize,LONG, this);
-            return (void*)tempRefe;
-        }
+    if(!JsonDocument.IsObject()){
+        std::cout<<"Error: Json corrupto:"<<tempFromServer<<std::endl;
+        return NULL;
+    }
+    rapidjson::Value & respondCheck= JsonDocument[CHECK];
+    //revisamos si es un positivo la accion pedida.
+    if(respondCheck.GetInt()==DOS){
+        std::cout<<"Error: token invalido o expirado"<<std::endl;
+        requestNewToken();
+        return xMalloc(pSize, pType);
+    }
+    else if(respondCheck.GetInt()==UNO){
+        std::cout<<"Error: alojamiento de memoria invalido"<<std::endl;
+        return NULL;
+    }
+    rapidjson::Value & respondId= JsonDocument[ID];
+    int tempId= respondId.GetInt();
+    /*-----creacion del puntero del xReference-----*/
+    if(pType==CHAR){
+        void* ptrVoidRefe=malloc(sizeof(xReference<char>));
+        //se usa 'placemente new' para usar constructor del puntero 
+        //y asignarlos en un espacio especifico
+        xReference<char>* tempRefe= new (ptrVoidRefe)xReference<char>(
+            tempId, pSize*getSizeOfType(pType),CHAR, this);
+        //se retorna el puntero como un void* asi como se hace con un malloc
+        return (void*)tempRefe;
+    }else if(pType==INT){
+        void* ptrVoidRefe=malloc(sizeof(xReference<int>));
+        xReference<int>* tempRefe= new (ptrVoidRefe) xReference<int>(
+            tempId, pSize*getSizeOfType(pType),INT, this);
+        return (void*)tempRefe;
+    }else if(pType==FLOAT){
+        void* ptrVoidRefe=malloc(sizeof(xReference<float>));
+        xReference<float>* tempRefe= new (ptrVoidRefe) xReference<float>(
+            tempId, pSize*getSizeOfType(pType),FLOAT, this);
+        return (void*)tempRefe;
+    }else if(pType==DOUBLE){
+        void* ptrVoidRefe=malloc(sizeof(xReference<double>));
+        xReference<double>* tempRefe= new (ptrVoidRefe) xReference<double>(
+            tempId, pSize*getSizeOfType(pType),DOUBLE, this);
+        return (void*)tempRefe;
+    }else if(pType==LONG){
+        void* ptrVoidRefe=malloc(sizeof(xReference<long>));
+        xReference<long>* tempRefe= new (ptrVoidRefe) xReference<long>(
+            tempId, pSize*getSizeOfType(pType),LONG, this);
+        return (void*)tempRefe;
     }
 }
 
@@ -119,53 +156,57 @@ void* LocalMemoryManager::xMalloc(int pSize, int pType) {
  */
 void* LocalMemoryManager::xMalloc(int pSize, int pType, void* pValue) {
     std::string temp= _JsonMessageCreator->createMessage(OPERATION_WR,_Token,
-            pValue,pSize,-UNO);
+            pValue,pSize*getSizeOfType(pType),-UNO);
     std::string tempFromServer=(char*)_cliente->sendMessageToServer(temp);
     rapidjson::Document JsonDocument;
     JsonDocument.Parse(tempFromServer.c_str());
-    if(JsonDocument.IsObject()){
-        rapidjson::Value & respondCheck= JsonDocument[CHECK];
-        if(respondCheck.GetInt()==UNO){
-            std::cout<<"error de guardado de archivo"<<std::endl;
-            return NULL;
-        }
-        rapidjson::Value & respondId= JsonDocument[ID];
-        int tempId= respondId.GetInt();
-        if(pType==CHAR){
-            void* ptrVoidRefe=malloc(sizeof(xReference<char>));
-            xReference<char>* tempRefe= new (ptrVoidRefe) xReference<char>(
-                tempId, pSize,CHAR, this);
-            free(pValue);
-            return (void*)tempRefe;
-        }else if(pType==INT){
-            void* ptrVoidRefe=malloc(sizeof(xReference<int>));
-            xReference<int>* tempRefe= new (ptrVoidRefe) xReference<int>(
-                tempId, pSize,INT, this);
-            free(pValue);
-            return (void*)tempRefe;
-        }else if(pType==FLOAT){
-            void* ptrVoidRefe=malloc(sizeof(xReference<float>));
-            xReference<float>* tempRefe= new (ptrVoidRefe) xReference<float>(
-                tempId, pSize,FLOAT,this);
-            free(pValue);
-            return (void*)tempRefe;
-        }else if(pType==DOUBLE){
-            void* ptrVoidRefe=malloc(sizeof(xReference<double>));
-            xReference<double>* tempRefe= new (ptrVoidRefe) xReference<double>(
-                tempId, pSize,DOUBLE,this);
-            free(pValue);
-            return (void*)tempRefe;
-        }else if(pType==LONG){
-            void* ptrVoidRefe=malloc(sizeof(xReference<long>));
-            xReference<long>* tempRefe= new (ptrVoidRefe) xReference<long>(
-                tempId, pSize,LONG, this);
-            return (void*)tempRefe;
-        }
+    if(!JsonDocument.IsObject()){
+        std::cout<<"Error: Json corrupto"<<std::endl;
+        return NULL;
     }
-    else{
-        std::cout<<"error de lectura en Json"<<std::endl;
+    rapidjson::Value & respondCheck= JsonDocument[CHECK];
+    //revisamos si el token existe
+    if(respondCheck.GetInt()==DOS){
+        std::cout<<"Error: token invalido o expirado"<<std::endl;
+        requestNewToken();
+        return xMalloc(pSize, pType, pValue);
     }
-    return NULL;
+    else if(respondCheck.GetInt()==UNO){
+        std::cout<<"Error: alojamiento de memoria invalido"<<std::endl;
+        return NULL;
+    }
+    rapidjson::Value & respondId= JsonDocument[ID];
+    int tempId= respondId.GetInt();
+    if(pType==CHAR){
+        void* ptrVoidRefe=malloc(sizeof(xReference<char>));
+        xReference<char>* tempRefe= new (ptrVoidRefe) xReference<char>(
+            tempId, pSize*getSizeOfType(pType),CHAR, this);
+        free(pValue);
+        return (void*)tempRefe;
+    }else if(pType==INT){
+        void* ptrVoidRefe=malloc(sizeof(xReference<int>));
+        xReference<int>* tempRefe= new (ptrVoidRefe) xReference<int>(
+            tempId, pSize*getSizeOfType(pType),INT, this);
+        free(pValue);
+        return (void*)tempRefe;
+    }else if(pType==FLOAT){
+        void* ptrVoidRefe=malloc(sizeof(xReference<float>));
+        xReference<float>* tempRefe= new (ptrVoidRefe) xReference<float>(
+            tempId, pSize*getSizeOfType(pType),FLOAT,this);
+        free(pValue);
+        return (void*)tempRefe;
+    }else if(pType==DOUBLE){
+        void* ptrVoidRefe=malloc(sizeof(xReference<double>));
+        xReference<double>* tempRefe= new (ptrVoidRefe) xReference<double>(
+            tempId, pSize*getSizeOfType(pType),DOUBLE,this);
+        free(pValue);
+        return (void*)tempRefe;
+    }else if(pType==LONG){
+        void* ptrVoidRefe=malloc(sizeof(xReference<long>));
+        xReference<long>* tempRefe= new (ptrVoidRefe) xReference<long>(
+            tempId, pSize*getSizeOfType(pType),LONG, this);
+        return (void*)tempRefe;
+    }
 }
 
 /**
@@ -192,13 +233,35 @@ void LocalMemoryManager::xAssing(void* pRefe, void* pValue, int pType) {
         xReference<float>* xRefePtr= (xReference<float>*)pRefe;
         temp= _JsonMessageCreator->createMessage(OPERATION_WR, _Token, pValue, 
             xRefePtr->getSize(),xRefePtr->getID());
-    }if(pType==DOUBLE){
+    }else if(pType==DOUBLE){
         xReference<double>* xRefePtr= (xReference<double>*)pRefe;
         temp= _JsonMessageCreator->createMessage(OPERATION_WR, _Token, pValue,
             xRefePtr->getSize(),xRefePtr->getID());
+    }else if(pType==LONG){
+        xReference<long>* xRefePtr= (xReference<long>*)pRefe;
+        temp= _JsonMessageCreator->createMessage(OPERATION_WR, _Token, pValue,
+            xRefePtr->getSize(),xRefePtr->getID());
     }
+    
     temp=(char*)_cliente->sendMessageToServer(temp);
     std::cout<<temp<<std::endl;
+    rapidjson::Document JsonFromServer;
+    JsonFromServer.Parse(temp.c_str());
+    if(!JsonFromServer.IsObject()){
+        std::cout<<"Error: Json corrupto"<<std::endl;
+        return;
+    }
+    rapidjson::Value & respondCheck= JsonFromServer[CHECK];
+    //revisamos si es un positivo la accion pedida.
+    if(respondCheck.GetInt()==DOS){
+        std::cout<<"Error: token invalido o expirado"<<std::endl;
+        requestNewToken();
+        return xAssing(pRefe, pValue, pType);
+    }
+    else if(respondCheck.GetInt()==UNO){
+        std::cout<<"Error: alojamiento de memoria invalido"<<std::endl;
+        return;
+    }
 }
 
 /**
@@ -211,20 +274,20 @@ void LocalMemoryManager::xFree(void* pRefe, int pType) {
     //a la espera de ser terminado
     if(pType==CHAR){
         xReference<char>* xRefePtr= (xReference<char>*)pRefe;
-        temp= _JsonMessageCreator->createMessage(OPERATION_DL, _Token, NULL, 0,
-                xRefePtr->getID());
+        temp= _JsonMessageCreator->createMessage(OPERATION_DL, _Token, NULL, 
+                xRefePtr->getSize(),xRefePtr->getID());
     }else if(pType==INT){
         xReference<int>* xRefePtr= (xReference<int>*)pRefe;
-        temp= _JsonMessageCreator->createMessage(OPERATION_DL, _Token, NULL, 0,
-                xRefePtr->getID());
+        temp= _JsonMessageCreator->createMessage(OPERATION_DL, _Token, NULL, 
+                xRefePtr->getSize(),xRefePtr->getID());
     }else if(pType==FLOAT){
         xReference<float>* xRefePtr= (xReference<float>*)pRefe;
-        temp= _JsonMessageCreator->createMessage(OPERATION_DL, _Token, NULL, 0,
-                xRefePtr->getID());
+        temp= _JsonMessageCreator->createMessage(OPERATION_DL, _Token, NULL, 
+                xRefePtr->getSize(),xRefePtr->getID());
     }if(pType==DOUBLE){
         xReference<double>* xRefePtr= (xReference<double>*)pRefe;
-        temp= _JsonMessageCreator->createMessage(OPERATION_DL, _Token, NULL, 0,
-                xRefePtr->getID());
+        temp= _JsonMessageCreator->createMessage(OPERATION_DL, _Token, NULL, 
+                xRefePtr->getSize(),xRefePtr->getID());
     }
     temp=(char*)_cliente->sendMessageToServer(temp);
     std::cout<<temp<<std::endl;
