@@ -44,7 +44,12 @@ string JsonCreator::createMessage(int pOperation, string pToken, void* pMessage,
         writer.String(MESSAGE);
         writer.String((const char*)pMessage, pLenght, 0);
     }
-    else if(pId>-UNO){
+    if(pLenght>CERO){
+        //establecemos el espacio que va a ocupar el mensaje
+        writer.String(SIZE);
+        writer.String(to_string(pLenght).c_str());
+    }
+    if(pId>-UNO){
         //establecemos el id que queremos pedir.
         writer.String(ID);
         writer.String(to_string(pId).c_str());
