@@ -43,10 +43,11 @@ int main(int argc, char** argv) {
     //prueba de desreferencia 
     *(*object);
      * */
-    
+    xReference<char>* xRefNuevo;
     LocalMemoryManager * nuevo = new LocalMemoryManager();
     nuevo->initialize(5001,"127.0.0.1\0");
-    nuevo->requestNewToken();
+    //nuevo->requestNewToken();
+    xRefNuevo=(xReference<char>*)nuevo->xMalloc(4,sizeof(char));
     while(true);
     return 0;
 }
