@@ -20,7 +20,6 @@ public:
     LocalMemoryManager();
     virtual ~LocalMemoryManager();
     char* initialize(int pPort, char* pIp);
-    char* requestNewToken();
     void* xMalloc(int pSize, int pType);
     void* xMalloc(int pSize, int pType, void* pValue);
     void xAssing(void* pRefe, void* pValue, int pType);
@@ -31,6 +30,8 @@ private:
     cliente * _cliente;
     JsonCreator* _JsonMessageCreator;
     char* _Token;
+    char* requestNewToken();
+    int getSizeOfType(int pType);
 };
 
 #endif	/* LOCALMEMORYMANAGER_H */
