@@ -13,11 +13,15 @@
 
 class Constantes {
 public:
+    
+    /*tipado de datos que se usaran en el xReference*/
+    
     static const int CHAR=1;
     static const int INT=2;
     static const int FLOAT=3;
     static const int DOUBLE=4;
     static const int LONG=5;
+    
     /*numeros de multiproposito*/
     
     static const int CERO=0;
@@ -28,11 +32,14 @@ public:
     static const int CINCO=5;
     static const int SEIS=6;
     static const int SIETE=7;
+    static const int OCHO=8;
     static const int DIEZ=10;
     
     /*constantes de uso dentro de las clases*/
     
-    static const int BUFFER_SIZE=10;
+    /*tamaño del buffer para recibir desde el server*/
+    static const int BUFFER_SIZE=128;
+    /*tamaño del token para recibir desde el server*/
     static const int TOKE_SIZE=128;
     /*write memory*/
     static const int OPERATION_WR=0;
@@ -46,12 +53,14 @@ public:
     static const int OPERATION_IR=4;
     /*decrement reference counter*/
     static const int OPERATION_DR=5;
+    /*check token*/
     static const char* REQUEST_NEW_TOKEN;
     static const char* OPERATION;
     static const char* TOKEN;
     static const char* ID;
     static const char* MESSAGE;
     static const char* CHECK;
+    static const char* SIZE;
     
     /*Errores por parte del cliente que se usara*/
     
