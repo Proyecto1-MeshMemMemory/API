@@ -87,7 +87,7 @@ string JsonCreator::createMessage(int pOperation, string pToken, void* pMessage,
         encodedMsg = encode((const char*)data, pLenght+UNO);
         //ingresamos mensaje en el Json.
         writer.String(MESSAGE);
-        writer.String(encodedMsg, pLenght+UNO, CERO);
+        writer.String(encodedMsg, charLenght(encodedMsg), CERO);
     }
     if(pLenght>CERO){
         //establecemos el espacio que va a ocupar el mensaje
