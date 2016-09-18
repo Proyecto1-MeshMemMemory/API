@@ -7,6 +7,7 @@
 
 #include "LocalMemoryManager.h"
 #include "xReference.h"
+#include "libb64-1.2/include/b64/cdecode.h"
 
 /**
  * constructor de la clase
@@ -319,6 +320,41 @@ void* LocalMemoryManager::changeReferenceCounter(int pID, int pOp) {
 }
 
 /**
+ * metodo para decodificar el arreglo de chars que contiene codificacion en 
+ * base64, se le ingresa el arreglo y el largo de este y nos devolvera un 
+ * arreglo que contiene los bytes que anteriormente se habian codificado.
+ * @param input recibe un const char* que es el arreglo de caracteres 
+ * codificado.
+ * @param lenght dato del tipo entero que es el largo de la cadena de 
+ * caracteres.
+ * @return retorna un arreglo de char que contiene los bytes que se habian 
+ * codificado.
+ */
+char* decode(const char* input, int lenght){
+    /* set up a destination buffer large enough to hold the encoded data */
+    char* output = (char*)malloc(lenght+1);
+    /* keep track of our decoded position */
+    char* c = output;
+    /* store the number of bytes decoded by a single call */
+    int cnt = 0;
+    /* we need a decoder state */
+    base64_decodestate s;
+            /*---------- START DECODING ----------*/
+    /* initialise the decoder state */
+    base64_init_decodestate(&s);
+    /* decode the input data */
+    cnt = base64_decode_block(input, lenght, c, &s);
+    c += cnt;
+    /* note: there is no base64_decode_blockend! */
+    /*---------- STOP DECODING  ----------*/
+
+    /* we want to print the decoded data, so null-terminate it: */
+    (*c) = '\0';
+
+    return output;
+}
+
+/**
  * metodo para realizar la desreferencia de un xReference, con lo cual se nos
  * devolvera el dato al que apunta ese xReference. Recibe el id del objeto y 
  * el tamaño que esta pidiendo.
@@ -342,8 +378,10 @@ void* LocalMemoryManager::getDataFromReference(int pID, int pSize) {
         return NULL;
     }
     tempValue= tempJsonRecived[MESSAGE];
-    void * tempToReturn= malloc(pSize);
-    string tempDataFromJson= tempValue.GetString();
-    memcpy(tempToReturn, tempDataFromJson.c_str(), pSize);
-    return tempToReturn;
+    string tempMsg=tempValue.GetString();
+    char* decodedMsg;
+    decodedMsg = decode(tempMsg.c_str(), pSize);
+    void *dataRecovered= malloc(pSize);
+    memcpy(&dataRecovered, (const char*)decodedMsg, pSize);
+    return dataRecovered;
 }
