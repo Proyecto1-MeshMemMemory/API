@@ -81,6 +81,17 @@ public:
         }
         //std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
     };
+    
+    int charLenght(char* pMsgToMeassure){
+        int i=0;
+        for(; ;i++){
+            if(pMsgToMeassure[i]=='\0'){
+                i++;
+                break;
+            }
+        }
+        return i;
+    };
 };
 
 #endif	/* CONSTANTES_H */
