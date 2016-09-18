@@ -9,7 +9,7 @@
 //#include "LocalMemoryManager.h"
 #include "xReference.h"
 #include <assert.h>
-
+#include "Constantes.h"
 
 /*
  * 
@@ -89,6 +89,17 @@ int main(int argc, char** argv) {
 
     free(encoded);
     free(decoded);*/
+    Constantes * nuevo = new Constantes;
+    int i=0;
+    char* prueba= "hola mundo\0";
+    for(; ;i++){
+        if(prueba[i]=='\0'){
+            i++;
+            break;
+        }
+    }
+    cout<<i<<endl;
+    cout<<nuevo->charLenght(prueba)<<endl;
     cout<<true<<endl;
     cout<<false<<endl;
     return 0;
