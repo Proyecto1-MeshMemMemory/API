@@ -6,6 +6,44 @@
  */
 
 #include "JsonCreator.h"
+#include "libb64-1.2/include/b64/cencode.h"
+
+/**
+ * Metodo para codificar una cadena de bytes copiados a un arreglo de chars y 
+ * nos devolvera el significativo en codificacion de base64, este metodo se 
+ * asegurar la no corrupcion de datos mediante la transferencia.
+ * @param input dato del tipo const char* que es arreglo de los bytes que 
+ * tenemos que convertir.
+ * @param lenght dato del tipo entero que es el largo del arreglo de bytes.
+ * @return retorna un arreglo de char* con caracteres visibles de ASCII.
+ */
+char* encode(const char* input, int lenght){
+    /* set up a destination buffer large enough to hold the encoded data */
+    char* output = (char*)malloc(lenght+1);
+    /* keep track of our encoded position */
+    char* c = output;
+    /* store the number of bytes encoded by a single call */
+    int cnt = 0;
+    /* we need an encoder state */
+    base64_encodestate s;
+
+    /*---------- START ENCODING ----------*/
+    /* initialise the encoder state */
+    base64_init_encodestate(&s);
+    /* gather data from the input and send it to the output */
+    cnt = base64_encode_block(input, lenght, c, &s);
+    c += cnt;
+    /* since we have encoded the entire input string, we know that 
+       there is no more input data; finalise the encoding */
+    cnt = base64_encode_blockend(c, &s);
+    c += cnt;
+    /*---------- STOP ENCODING  ----------*/
+
+    /* we want to print the encoded data, so null-terminate it: */
+    (*c) = '\0';
+
+    return output;
+}
 
 /**
  * constructor de la clase.
@@ -41,8 +79,15 @@ string JsonCreator::createMessage(int pOperation, string pToken, void* pMessage,
     writer.String(pToken.c_str());
     if(pMessage!=NULL){
         //establecemos el mensaje que queremos enviar
+        //codificamos informacion
+        char data[pLenght+UNO];
+        memcpy(data, (const void*)pMessage, pLenght);
+        data[pLenght]='\0';
+        char* encodedMsg;
+        encodedMsg = encode((const char*)data, pLenght+UNO);
+        //ingresamos mensaje en el Json.
         writer.String(MESSAGE);
-        writer.String((const char*)pMessage, pLenght, 0);
+        writer.String(encodedMsg, pLenght+UNO, CERO);
     }
     if(pLenght>CERO){
         //establecemos el espacio que va a ocupar el mensaje
