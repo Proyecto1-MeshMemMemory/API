@@ -6,10 +6,10 @@
  */
 
 #include <cstdlib>
-#include "LocalMemoryManager.h"
+//#include "LocalMemoryManager.h"
 #include "xReference.h"
+#include <assert.h>
 
-using namespace std;
 
 /*
  * 
@@ -43,12 +43,54 @@ int main(int argc, char** argv) {
     //prueba de desreferencia 
     *(*object);
      * */
-    xReference<char>* xRefNuevo;
+    /*xReference<char>* xRefNuevo;
     LocalMemoryManager * nuevo = new LocalMemoryManager();
     nuevo->initialize(5001,"127.0.0.1\0");
     //nuevo->requestNewToken();
     xRefNuevo=(xReference<char>*)nuevo->xMalloc(4,sizeof(char));
-    while(true);
+    while(true);*/
+    /**lineas necesarias para codificar y decodificar**
+    int datoToCode=9785144;
+    char data[sizeof(datoToCode)+1];
+    memcpy(data, (const void*)&datoToCode, sizeof(datoToCode));
+    data[sizeof(datoToCode)]='\0';
+    char* encoded;
+    encoded = encode((const char*)data, sizeof(datoToCode)+1);
+    char* decoded;
+    decoded = decode(encoded, sizeof(datoToCode)+1);
+    int dataRecovered;
+    memcpy(&dataRecovered, (const char*)decoded, sizeof(datoToCode));
+    /****
+    int datoToCode=9785144;
+    char data[sizeof(datoToCode)+1];
+    memcpy(data, (const void*)&datoToCode, sizeof(datoToCode));
+    data[sizeof(datoToCode)]='\0';
+    cout<<data<<endl;
+    const char* input = "hello world";
+    char* encoded;
+    char* decoded;
+
+    /* encode the data *
+    encoded = encode((const char*)data, sizeof(datoToCode)+1);
+    printf("encoded: %s", encoded); /* encoded data has a trailing newline */
+
+    /* decode the data *
+    decoded = decode(encoded, sizeof(datoToCode)+1);
+    printf("decoded: %s\n", decoded);
+    for(int i =0; i< (sizeof(datoToCode)+1); i++){
+        if(data[i]==decoded[i])
+            cout<<"true"<<endl;
+    }
+    int dataRecovered;
+    memcpy(&dataRecovered, (const char*)decoded, sizeof(datoToCode));
+    cout<<dataRecovered<<endl;
+    /* compare the original and decoded data *
+    //assert(strcmp(input, decoded) == 0);
+
+    free(encoded);
+    free(decoded);*/
+    cout<<true<<endl;
+    cout<<false<<endl;
     return 0;
 }
 
