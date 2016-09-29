@@ -66,8 +66,8 @@ JsonCreator::~JsonCreator() {
  * @param pId entero del id del vamos a extrañr el daor
  * @return returna el mensaje ya creado.
  */
-string JsonCreator::createMessage(int pOperation, string pToken, void* pMessage,
-        int pLenght,  int pId) {
+std::string JsonCreator::createMessage(int pOperation, std::string pToken, void* pMessage,
+        int pLenght,  std::string pId) {
     rapidjson::StringBuffer JsonToWrite;
     rapidjson::Writer<rapidjson::StringBuffer> writer(JsonToWrite);
     writer.StartObject();
@@ -92,12 +92,12 @@ string JsonCreator::createMessage(int pOperation, string pToken, void* pMessage,
     if(pLenght>CERO){
         //establecemos el espacio que va a ocupar el mensaje
         writer.String(SIZE);
-        writer.String(to_string(pLenght).c_str());
+        writer.String(std::to_string(pLenght).c_str());
     }
-    if(pId>-UNO){
+    if(pId!=""){
         //establecemos el id que queremos pedir.
         writer.String(ID);
-        writer.String(to_string(pId).c_str());
+        writer.String(pId.c_str());
     }
     
     //cerramos el objeto

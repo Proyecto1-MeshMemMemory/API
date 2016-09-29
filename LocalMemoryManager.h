@@ -24,8 +24,8 @@ public:
     void* xMalloc(int pSize, int pType, void* pValue);
     void xAssing(void* pRefe, void* pValue, int pType);
     void xFree(void* pRefe, int pType);
-    void* changeReferenceCounter(int pID, int pOp);
-    void* getDataFromReference(int pID, int pSize);
+    void* changeReferenceCounter(std::string pID, int pOp);
+    void* getDataFromReference(std::string pID, int pSize);
 private:
     cliente * _cliente;
     JsonCreator* _JsonMessageCreator;

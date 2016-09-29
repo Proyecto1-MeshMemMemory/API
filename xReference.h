@@ -48,7 +48,7 @@ public:
      * retorna el id del objeto 
      * @return entero del id del objeto.
      */
-    int getID(){
+    string getID(){
         return _ID;
     };
     
@@ -94,9 +94,15 @@ public:
      * @param obj
      * @return 
      */
-    xReference& operator=(const xReference<T>& obj){   
-        if(this != &obj){
-            printf("Tome mil :3:\n");
+    xReference& operator=(const xReference<T>& obj){ 
+        if(obj==NULL){
+            this->_pointerToLocalManager->changeReferenceCounter(this->_ID,OPERATION_DR);
+            this->_ID=NULL;
+            this->_type=NULL;
+            this->_size=NULL;
+            this->_count=NULL;
+        }
+        else if(this != &obj){
             this->_pointerToLocalManager->changeReferenceCounter(this->_ID,OPERATION_DR);
             this->_pointerToLocalManager->changeReferenceCounter(obj._ID,OPERATION_IR);
             this->_ID=obj._ID;
@@ -115,12 +121,11 @@ public:
     void* operator*(){
         void * temp= this->_pointerToLocalManager->getDataFromReference(_ID,
                 OPERATION_RD);
-        printf("Tome dos mil :3\n");
         return temp;
     };
     
 private:
-    int _ID;
+    std::string _ID;
     int _size;
     int _type;
     int _count;
@@ -132,7 +137,7 @@ private:
      * @param pType
      * @param pLocalManager
      */
-    xReference(int pID, int pSize, int pType, LocalMemoryManager* pLocalManager){
+    xReference(std::string pID, int pSize, int pType, LocalMemoryManager* pLocalManager){
         _ID=pID;
         _size=pSize;
         _type=pType;

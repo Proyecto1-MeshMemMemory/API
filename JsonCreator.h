@@ -14,13 +14,12 @@
 /**
  * metodo para hacer Jsons segun los parametro que se le proporcionen.
  */
-using namespace std;
 class JsonCreator : public Constantes{
 public:
     JsonCreator();
     virtual ~JsonCreator();
     std::string createMessage(int pOperation, std::string pToken, void* pMessage,
-    int pLenght,  int pId);
+    int pLenght, std::string pId);
 
 };
 

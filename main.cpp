@@ -6,7 +6,7 @@
  */
 
 #include <cstdlib>
-//#include "LocalMemoryManager.h"
+#include "LocalMemoryManager.h"
 #include "xReference.h"
 #include <assert.h>
 #include "Constantes.h"
@@ -43,12 +43,18 @@ int main(int argc, char** argv) {
     //prueba de desreferencia 
     *(*object);
      * */
-    /*xReference<char>* xRefNuevo;
+    
+    /*prueba para Api con un alojo de memoria*/
+    xReference<int>* xRefNuevo;
     LocalMemoryManager * nuevo = new LocalMemoryManager();
     nuevo->initialize(5001,"127.0.0.1\0");
     //nuevo->requestNewToken();
-    xRefNuevo=(xReference<char>*)nuevo->xMalloc(4,sizeof(char));
-    while(true);*/
+    int* temp=(int*)malloc(sizeof(int));
+    *temp=1234567;
+    xRefNuevo=(xReference<int>*)nuevo->xMalloc(4,sizeof(int));
+    xRefNuevo=(xReference<int>*)nuevo->xMalloc(4,sizeof(int),temp);
+    while(true);
+    
     /**lineas necesarias para codificar y decodificar**
     int datoToCode=9785144;
     char data[sizeof(datoToCode)+1];
@@ -89,19 +95,6 @@ int main(int argc, char** argv) {
 
     free(encoded);
     free(decoded);*/
-    Constantes * nuevo = new Constantes;
-    int i=0;
-    char* prueba= "hola mundo\0";
-    for(; ;i++){
-        if(prueba[i]=='\0'){
-            i++;
-            break;
-        }
-    }
-    cout<<i<<endl;
-    cout<<nuevo->charLenght(prueba)<<endl;
-    cout<<true<<endl;
-    cout<<false<<endl;
     return 0;
 }
 

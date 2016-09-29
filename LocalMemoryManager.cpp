@@ -92,7 +92,7 @@ int LocalMemoryManager::getSizeOfType(int pType) {
  */
 void* LocalMemoryManager::xMalloc(int pSize, int pType) {
     std::string temp= _JsonMessageCreator->createMessage(OPERATION_AL,_Token,
-            NULL,pSize*getSizeOfType(pType),-UNO);
+            NULL,pSize*getSizeOfType(pType),"");
     std::string tempFromServer=(char*)_cliente->sendMessageToServer(temp);
     rapidjson::Document JsonDocument;
     JsonDocument.Parse(tempFromServer.c_str());
@@ -112,7 +112,7 @@ void* LocalMemoryManager::xMalloc(int pSize, int pType) {
         return NULL;
     }
     rapidjson::Value & respondId= JsonDocument[ID];
-    int tempId= respondId.GetInt();
+    std::string tempId= respondId.GetString();
     /*-----creacion del puntero del xReference-----*/
     if(pType==CHAR){
         void* ptrVoidRefe=malloc(sizeof(xReference<char>));
@@ -157,7 +157,7 @@ void* LocalMemoryManager::xMalloc(int pSize, int pType) {
  */
 void* LocalMemoryManager::xMalloc(int pSize, int pType, void* pValue) {
     std::string temp= _JsonMessageCreator->createMessage(OPERATION_WR,_Token,
-            pValue,pSize*getSizeOfType(pType),-UNO);
+            pValue,pSize*getSizeOfType(pType),"");
     std::string tempFromServer=(char*)_cliente->sendMessageToServer(temp);
     rapidjson::Document JsonDocument;
     JsonDocument.Parse(tempFromServer.c_str());
@@ -177,7 +177,7 @@ void* LocalMemoryManager::xMalloc(int pSize, int pType, void* pValue) {
         return NULL;
     }
     rapidjson::Value & respondId= JsonDocument[ID];
-    int tempId= respondId.GetInt();
+    std::string tempId= respondId.GetString();
     if(pType==CHAR){
         void* ptrVoidRefe=malloc(sizeof(xReference<char>));
         xReference<char>* tempRefe= new (ptrVoidRefe) xReference<char>(
@@ -302,10 +302,10 @@ void LocalMemoryManager::xFree(void* pRefe, int pType) {
  * @param pOp entero de la operacion que vamos a realizar.
  * @return retorna el mensaje que nos devolvio el Manager.
  */
-void* LocalMemoryManager::changeReferenceCounter(int pID, int pOp) {
-    string temp=_JsonMessageCreator->createMessage(pOp, _Token, NULL, 
+void* LocalMemoryManager::changeReferenceCounter(std::string pID, int pOp) {
+    std::string temp=_JsonMessageCreator->createMessage(pOp, _Token, NULL, 
             CERO, pID);
-    string newTemp=(char*)_cliente->sendMessageToServer(temp);
+    std::string newTemp=(char*)_cliente->sendMessageToServer(temp);
     rapidjson::Document tempJsonRecived;
     tempJsonRecived.Parse(newTemp.c_str());
     if(!tempJsonRecived.IsObject()){
@@ -362,10 +362,10 @@ char* decode(const char* input, int lenght){
  * @param pSize entero del tamaño del objeto que estamos pidiendo.
  * @return retorna el dato almacenado ahora en un puntero void*s
  */
-void* LocalMemoryManager::getDataFromReference(int pID, int pSize) {
-    string temp=_JsonMessageCreator->createMessage(OPERATION_RD, _Token, NULL,
+void* LocalMemoryManager::getDataFromReference(std::string pID, int pSize) {
+    std::string temp=_JsonMessageCreator->createMessage(OPERATION_RD, _Token, NULL,
             pSize, pID);
-    string newTemp=(char*)_cliente->sendMessageToServer(temp);
+    std::string newTemp=(char*)_cliente->sendMessageToServer(temp);
     rapidjson::Document tempJsonRecived;
     tempJsonRecived.Parse(newTemp.c_str());
     if(!tempJsonRecived.IsObject()){
@@ -378,7 +378,7 @@ void* LocalMemoryManager::getDataFromReference(int pID, int pSize) {
         return NULL;
     }
     tempValue= tempJsonRecived[MESSAGE];
-    string tempMsg=tempValue.GetString();
+    std::string tempMsg=tempValue.GetString();
     char* decodedMsg;
     decodedMsg = decode(tempMsg.c_str(), pSize);
     void *dataRecovered= malloc(pSize);
