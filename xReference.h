@@ -67,6 +67,7 @@ public:
      * @return return booleano de si la verificacion.
      */
     friend bool operator==(const xReference<T>& obj, const xReference<T>& obj2){
+        cout<<"prueba de igualdad"<<endl;
         bool rVal = false;      
         if (obj._ID==obj2._ID && obj._type==obj2._type){
             rVal = true;
@@ -81,6 +82,7 @@ public:
      * @return return booleano de si la verificacion.
      */
     friend bool operator!=(const xReference<T>& obj, const xReference<T>& obj2){
+        cout<<"prueba de desigualdad"<<endl;
         bool rVal = false;      
         if (obj._ID!=obj2._ID && obj._type!=obj2._type){
             rVal = true;
@@ -95,6 +97,7 @@ public:
      * @return 
      */
     xReference& operator=(const xReference<T>& obj){ 
+        cout<<"prueba de asignacion"<<endl;
         if(obj==NULL){
             this->_pointerToLocalManager->changeReferenceCounter(this->_ID,OPERATION_DR);
             this->_ID=NULL;
@@ -119,6 +122,7 @@ public:
      * previo uso.
      */
     void* operator*(){
+        cout<<"prueba de desreferencia"<<endl;
         void * temp= this->_pointerToLocalManager->getDataFromReference(_ID,
                 OPERATION_RD);
         return temp;
