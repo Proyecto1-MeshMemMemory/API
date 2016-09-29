@@ -67,7 +67,8 @@ int main(int argc, char** argv) {
     }
     else
         cout<<"false"<<endl;
-    
+    (*xRefNuevo)=(*xRefNuevo2);
+    *(*xRefNuevo);
     while(true);
     
     /**lineas necesarias para codificar y decodificar**
