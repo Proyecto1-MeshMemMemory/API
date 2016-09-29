@@ -45,7 +45,9 @@ int main(int argc, char** argv) {
      * */
     
     /*prueba para Api con un alojo de memoria*/
-    xReference<int>* xRefNuevo;
+    Constantes* constt= new Constantes();
+    xReference<int>* xRefNuevo=NULL;
+    xReference<int>* xRefNuevo2=NULL;
     LocalMemoryManager * nuevo = new LocalMemoryManager();
     nuevo->initialize(5001,"127.0.0.1\0");
     //nuevo->requestNewToken();
@@ -53,6 +55,19 @@ int main(int argc, char** argv) {
     *temp=1234567;
     xRefNuevo=(xReference<int>*)nuevo->xMalloc(4,sizeof(int));
     xRefNuevo=(xReference<int>*)nuevo->xMalloc(4,sizeof(int),temp);
+    nuevo->xAssing(xRefNuevo, temp, constt->INT);
+    nuevo->xFree(xRefNuevo, constt->INT);
+    if((*xRefNuevo)==(*xRefNuevo2)){
+        cout<<"true"<<endl;
+    }
+    else
+        cout<<"false"<<endl;
+    if((*xRefNuevo)!=(*xRefNuevo2)){
+        cout<<"true"<<endl;
+    }
+    else
+        cout<<"false"<<endl;
+    
     while(true);
     
     /**lineas necesarias para codificar y decodificar**
